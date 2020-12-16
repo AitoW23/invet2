@@ -1,86 +1,139 @@
-<img width="150" height="150" align="left" style="float: left; margin: 0 10px 0 0;" alt="Buff" src="https://cdn.discordapp.com/avatars/637650540561694730/7da77a0cfbf0d1f2b0ba1d91e4032908.png?size=2048">  
+Heroku buildpack for Java [![CircleCI](https://circleci.com/gh/heroku/heroku-buildpack-java/tree/main.svg?style=shield)](https://circleci.com/gh/heroku/heroku-buildpack-java/tree/main)
+=========================
 
-  # Buff
+![java](https://cloud.githubusercontent.com/assets/871315/20325947/f3544014-ab43-11e6-9c51-8240ce161939.png)
 
-[![](https://img.shields.io/discord/565048515357835264.svg?logo=discord&colorB=7289DA)](http://buffbot.7m.pl/)
+This is the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpack) for Java apps.
+It uses Maven 3.6.2 to build your application and OpenJDK 8 to run it. However, the JDK version can be configured as described below.
 
-> This bot is used by more than 30000 Discord users in more than 600 servers.
+## How it works
 
-# Who will help me with OAuth2, Dashboard, Design please direct message (dm) me in Discord psycho#4412 and you will get credited also you will receive 1 Year Nitro Gift as reward :)
+The buildpack will detect your app as Java if it has a `pom.xml` file, or one of the other POM formats supports by the [Maven Polyglot](https://github.com/takari/polyglot-maven) plugin, in its root directory.  It will use Maven to execute the build defined by your `pom.xml` and download your dependencies. The `.m2` folder (local maven repository) will be cached between builds for faster dependency resolution. However neither the `mvn` executable nor the `.m2` folder will be available in your slug at runtime.
 
-Buff is a open source Discord bot coded in JavaScript with [Discord.js](https://discord.js.org) by [psycho#4412](https://discordapp.com/invite/CaBVadF).  
-Feel free to add a star ⭐ to the repository for all my hard work and motivation to improve this project.
+## Documentation
 
-## Features
+For more information about using Java and buildpacks on Heroku, see these Dev Center articles:
 
-#### Complete Bot
+*  [Heroku Java Support](https://devcenter.heroku.com/articles/java-support)
+*  [Introduction to Heroku for Java Developers](https://devcenter.heroku.com/articles/intro-for-java-developers)
+*  [Deploying Tomcat-based Java Web Applications with Webapp Runner](https://devcenter.heroku.com/articles/java-webapp-runner)
+*  [Deploy a Java Web Application that launches with Jetty Runner](https://devcenter.heroku.com/articles/deploy-a-java-web-application-that-launches-with-jetty-runner)
+*  [Using a Custom Maven Settings File](https://devcenter.heroku.com/articles/using-a-custom-maven-settings-xml)
+*  [Using Grunt with Java and Maven to Automate JavaScript Tasks](https://devcenter.heroku.com/articles/using-grunt-with-java-and-maven-to-automate-javascript-tasks)
 
-Buff offers:
-*   Much good commands including rarest ones (giveaway, moderation, etc)
-*   99,99 Uptime (Hosted in glitch.com)
-*   Support Server: [Buff Support](https://discordapp.com/invite/CaBVadF)
-*   Official Website: [Dashboard](http://buffbot.7m.pl/)
-*   Documentation Website: [Docs](http://buffbot.7m.pl/docs/)
+## Examples
 
-### Many commands
+* [Tomcat Webapp-Runner Example](https://github.com/kissaten/webapp-runner-minimal)
+* [Spring Boot Example](https://github.com/kissaten/spring-boot-heroku-demo)
 
-Buff has a lot of features, with **8 main categories**:
-The default prefix for the bot is "**=**"!
-*   🚓 **Moderation**: `giveaway`, `poll`, `purge`, `mute`, and **7** more! 
-*   👻 **Fun**: `meme`, `8ball`, `cat`, `dog`, `ping` and **18** more! 
-*   🎵 **Music**: `play`, `search`, `leave`, and **more** is coming soon! 
-*   💰 **Economy**: **Coming Soon**! 
-*   🖨️ **Info**: `botinfo`, `userinfo`, `serverinfo`, `roleinfo`, and **7** more! 
-*   🖨️ **General**: `help`, `help2`, `avatar`, `report`, `suggest`, and **2** more! 
-*   🚓 **NSFW**: write command `nsfw`, to get full list of NSFW commads!! 
-*   👑 **Owner**: `eval`, `restart`, `owner`, `setlistening` and **4** more!
+## Configuration
 
-See the full list of commands by writing =help or =help2 (Commands are different. Use which one you like)
+### Choose a JDK
 
-### Official Website
+Create a `system.properties` file in the root of your project directory and set `java.runtime.version=1.8`.
 
-Buff have its official Website! (OAuth2, dashboard is coming in the future. If you can help me with it, please contact me in Discord psycho#4412. Latest check date: 2019-11-09)
+Example:
 
-<img align="left" style="float: centrer; margin: 0 10px 0 0;" src="http://buffbot.7m.pl/images/1.png" height="200" width="350"/>
-<img align="center" style="float: left; margin: 0 10px 0 0;" src="http://buffbot.7m.pl/images/2.png" height="200" width="350"/>
-<img align="center" style="float: centrer; margin: 0 10px 0 0;" src="http://buffbot.7m.pl/images/3.png" height="200" width="350"/>
+    $ ls
+    Procfile pom.xml src
 
-Todo list:
+    $ echo "java.runtime.version=1.8" > system.properties
 
-- OAuth2
-- Better dashboard
-- Improve design
-- Customizable prefixes per server
-- Much More that associates with dashboard things
-##### Wanna help me? Dm psycho#4412 on Discord. Also, i'll give u credits and nitro as a gift.
+    $ git add system.properties && git commit -m "Java 8"
 
-## Installation
+    $ git push heroku main
+    ...
+    -----> Java app detected
+    -----> Installing OpenJDK 1.8... done
+    -----> Installing Maven 3.3.3... done
+    ...
 
-### Non-customized version
+### Choose a Maven Version
 
-If you don't want to edit the code of the bot, a permanent online version is available, which you can invite to your own Discord!   
+You can define a specific version of Maven for Heroku to use by adding the
+[Maven Wrapper](https://github.com/takari/maven-wrapper) to your project. When
+this buildpack detects the presence of a `mvnw` script and a `.mvn` directory,
+it will run the Maven Wrapper instead of the default `mvn` command.
 
-[![Discord Bots](https://discordbots.org/api/widget/5574457198926888777.svg)](https://discordbots.org/bot/55744885719892688897)
+If you need to override this, the `system.properties` file also allows for a `maven.version` entry
+(regardless of whether you specify a `java.runtime.version` entry). For example:
 
-### Customized version
+```
+java.runtime.version=1.8
+maven.version=3.3.9
+```
 
-If you want to edit the bot's code and host it on your machine, it's possible!  
-You must watch the [installation guide](youtube.com) on YouTube to properly install it! Don't worry, it's fast and simple if you follow the guide!
+### Customize Maven
 
-## Links
+There are three config variables that can be used to customize the Maven execution:
 
-*   [Support Server](https://discordapp.com/invite/CaBVadF)
-*   [Website](http://buffbot.7m.pl/)
-*   [Documentation](http://buffbot.7m.pl/docs/)
-*   [GitHub](https://github.com/DNDCoding/Buff)
-*   [Installation Guide](youtube.com)
++ `MAVEN_CUSTOM_GOALS`: set to `clean dependency:list install` by default
++ `MAVEN_CUSTOM_OPTS`: set to `-DskipTests` by default
++ `MAVEN_JAVA_OPTS`: set to `-Xmx1024m` by default
 
-## Contributing
+These variables can be set like this:
 
-Before **creating an issue**, please ensure that it hasn't already been reported/suggested.
-And if you have a question, please ask it in the [support server](https://discordapp.com/invite/CaBVadF) instead of opening an issue.
-If you wish to contribute to the Buff codebase or documentation, feel free to fork the repository and submit a pull request!
+```sh-session
+$ heroku config:set MAVEN_CUSTOM_GOALS="clean package"
+$ heroku config:set MAVEN_CUSTOM_OPTS="--update-snapshots -DskipTests=true"
+$ heroku config:set MAVEN_JAVA_OPTS="-Xss2g"
+```
 
-## License
+Other options are available for [defining a custom `settings.xml` file](https://devcenter.heroku.com/articles/using-a-custom-maven-settings-xml).
 
-Buff is licensed under the GPL 3.0 license. See the file `LICENSE` for more information. If you plan to use any part of this source code in your own bot, I would be grateful if you would include some form of credit somewhere.
+## Development
+
+To make changes to this buildpack, fork it on Github. Push up changes to your fork, then create a new Heroku app to test it, or configure an existing app to use your buildpack:
+
+```
+# Create a new Heroku app that uses your buildpack
+heroku create --buildpack <your-github-url>
+
+# Configure an existing Heroku app to use your buildpack
+heroku buildpacks:set <your-github-url>
+
+# You can also use a git branch!
+heroku buildpacks:set <your-github-url>#your-branch
+```
+
+For example if you want to have Maven available to use at runtime in your application, you can copy it from the cache directory to the build directory by adding the following lines to the compile script:
+
+    for DIR in ".m2" ".maven" ; do
+      cp -r $CACHE_DIR/$DIR $BUILD_DIR/$DIR
+    done
+
+This will copy the local Maven repo and Maven binaries into your slug.
+
+Commit and push the changes to your buildpack to your GitHub fork, then push your sample app to Heroku to test. Once the push succeeds you should be able to run:
+
+    $ heroku run bash
+
+and then:
+
+    $ ls -al
+
+and you'll see the `.m2` and `.maven` directories are now present in your slug.
+
+## Run Tests Locally
+
+Tests can be run and debugged locally by using the [Circle CI CLI](https://circleci.com/docs/2.0/local-cli/).
+
+For example, to run [Hatchet](https://github.com/heroku/hatchet) tests on `heroku-18` run:
+
+```
+$ circleci local execute --job hatchet-heroku-18 \
+    --env HEROKU_API_USER=$(heroku whoami) \
+    --env HEROKU_API_KEY=$(heroku auth:token)
+```
+
+Available jobs are defined in [.circleci/config.yml](.circleci/config.yml).
+
+### Costs
+
+This command uses the credentials from your local `heroku` configuration. This means your account will be billed for any
+cost these tests incur. Proceed with caution.
+
+License
+-------
+
+Licensed under the MIT License. See LICENSE file.
