@@ -1,5 +1,6 @@
 {
   "name": "Buff",
+  "node": "16.x"
   "version": "0.0.1",
   "lockfileVersion": 1,
   "requires": true,
