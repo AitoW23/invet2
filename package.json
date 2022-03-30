@@ -1,6 +1,5 @@
 {
   "name": "Buff",
-  "node": "16.x"
   "version": "0.0.1",
   "lockfileVersion": 1,
   "requires": true,
@@ -12,6 +11,7 @@
       "requires": {
         "mime-types": "~2.1.24",
         "negotiator": "0.6.2"
+        "node": "16"
       },
       "dependencies": {
         "mime-db": {
