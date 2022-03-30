@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "lockfileVersion": 1,
   "requires": true,
-  "engines": {
+  "engines": 
     "npm": "6.x"
-  }
+  
   
   "dependencies": {
     "accepts": {
