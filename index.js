@@ -138,7 +138,7 @@ fs.readdir("./commands/owner/", (err, files) => {
 //Welcomer
 //not done
 //Login as client
-client.login("NjM2NTE2MjEzMTgyMzAwMTcz.Xdva6g.nVLtKFp3dzSWxUK_CTUSstGMU50");
+client.login("NjYzODI0NDIyMjgwNDk1MTA1.XhOIqw.0GqH_hrnPXV6BkPYVS-HzyPOY38");
 /*
 https://discordapp.com/oauth2/authorize?client_id=PUTTHEREYOURBOTCLIENTID&scope=bot&permissions=8
 */
